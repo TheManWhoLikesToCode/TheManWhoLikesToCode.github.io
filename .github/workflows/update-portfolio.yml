@@ -27,12 +27,48 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        curl -s https://api.github.com/users/TheManWhoLikesToCode/repos?per_page=100 | jq -r '.[].name' | while read repo; do
-          readme=$(curl -s https://raw.githubusercontent.com/TheManWhoLikesToCode/$repo/master/README.md)
-          if [ "$readme" != "404: Not Found" ]; then
-            echo -e "---\nlayout: post\ntitle:  \"$repo\"\ndate:   $(date +"%Y-%m-%d")\ncategories: jekyll update\n---\n$readme" > ./_posts/$(date +"%Y-%m-%d")-$repo.md
-            git add .
-            git commit -m "Add new post: $repo"
-            git push
-          fi
-        done
+        require 'net/http'
+        require 'json'
+        require 'date'
+        require 'base64'
+
+        GITHUB_USERNAME = 'TheManWhoLikesToCode'
+        GITHUB_API_URL = "https://api.github.com/users/#{GITHUB_USERNAME}/repos"
+
+        # Fetch repositories from GitHub
+        uri = URI(GITHUB_API_URL)
+        response = Net::HTTP.get(uri)
+        repositories = JSON.parse(response)
+
+        # Loop through repositories and create posts
+        repositories.each do |repo|
+          title = repo['name']
+          description = repo['description']
+          url = repo['html_url']
+
+          # Extract the creation date and format it
+          creation_date = DateTime.parse(repo['created_at']).strftime("%Y-%m-%d")
+
+          # Fetch README
+          readme_uri = URI("https://api.github.com/repos/#{GITHUB_USERNAME}/#{title}/readme")
+          readme_response = Net::HTTP.get(readme_uri)
+          readme = JSON.parse(readme_response) rescue nil
+
+          # Decode README content from base64
+          readme_content = readme && readme['content'] ? Base64.decode64(readme['content']) : "No README available for this repository."
+
+          # Create the post file
+          File.open("./_posts/#{creation_date}-#{title}.markdown", "w") do |file|
+            file.puts("---")
+            file.puts("layout: post")
+            file.puts("title: #{title}")
+            file.puts("description: #{description}")
+            file.puts("---")
+            file.puts(readme_content)
+            file.puts("[Go to repository](#{url})")
+          end
+
+          git add .
+          git commit -m "Add new post: #{title}"
+          git push
+        end
