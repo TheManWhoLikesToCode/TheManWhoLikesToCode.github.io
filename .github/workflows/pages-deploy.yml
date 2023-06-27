@@ -1,9 +1,10 @@
 name: Deploy to GitHub Pages
 
 on:
-  schedule:
-    - cron: '0 0 * * *' # This schedules the action to run once every day at midnight
-
+  push:
+    branches:
+      - master
+      
 jobs:
   update_portfolio:
     runs-on: ubuntu-latest
