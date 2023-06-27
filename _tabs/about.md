@@ -51,4 +51,4 @@ Hello there! 👋🏾 I am Jaydin Freeman, a Computer Science and Artificial Int
 - 🛠️ GitHub: [TheManWhoLikesToCode](https://github.com/TheManWhoLikesToCode)
 - 🌐 Portfolio: [themanwholikestocode.github.io/Portfolio/](https://themanwholikestocode.github.io/Portfolio/)
 
-![Banner](/assets/lib/support/Banner.png)
+![Banner](/assets/support/Banner.png)
