@@ -80,7 +80,7 @@ theme_mode: dark # light
 img_cdn:
 
 # the avatar on sidebar, support local or CORS resources
-avatar: assets/lib/support/HeadShot.jfif
+avatar: /assets/lib/support/HeadShot.jfif
 
 # boolean type, the global switch for TOC in posts.
 toc: true
