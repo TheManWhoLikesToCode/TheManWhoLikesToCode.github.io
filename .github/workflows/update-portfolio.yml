@@ -21,6 +21,9 @@ jobs:
         gem install bundler
         bundle install --jobs 4 --retry 3
 
+    - name: Create _posts directory
+      run: mkdir -p _posts
+
     - name: Fetch READMEs and create posts
       run: |
         git config --local user.email "action@github.com"
