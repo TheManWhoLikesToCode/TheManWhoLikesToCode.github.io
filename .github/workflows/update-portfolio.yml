@@ -3,7 +3,7 @@ name: Jekyll Post Creator
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   build:
