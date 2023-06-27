@@ -25,4 +25,4 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        ruby script.rb
+        ruby scripts/create_posts_from_repos.rb
