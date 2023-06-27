@@ -1,12 +1,12 @@
-name: Update Portfolio
+name: Jekyll Post Creator
 
-on: 
-  push:
+on:
+  pushes:
     branches:
-      - main  # Trigger the workflow on push or pull request to the main branch
+      - master
 
 jobs:
-  update_portfolio:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,30 +16,23 @@ jobs:
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 2.6
-
-    - name: Update RubyGems
-      run: |
-        gem update --system
+        ruby-version: 2.7
 
     - name: Install dependencies
       run: |
         gem install bundler
         bundle install --jobs 4 --retry 3
 
-    - name: Fetch and create posts
-      env:
-        TOKEN: ${{ secrets.TOKEN }}
+    - name: Fetch READMEs and create posts
       run: |
-        # This script will use GitHub API to fetch your repos and create posts
-        # You need to create this script, see the next step
-        ruby ./scripts/create_posts_from_repos.rb
-
-    - name: Build site
-      run: bundle exec jekyll build
-
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.TOKEN }}
-        publish_dir: ./_site
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        curl -s https://api.github.com/users/TheManWhoLikesToCode/repos?per_page=100 | jq -r '.[].name' | while read repo; do
+          readme=$(curl -s https://raw.githubusercontent.com/TheManWhoLikesToCode/$repo/master/README.md)
+          if [ "$readme" != "404: Not Found" ]; then
+            echo -e "---\nlayout: post\ntitle:  \"$repo\"\ndate:   $(date +"%Y-%m-%d")\ncategories: jekyll update\n---\n$readme" > ./_posts/$(date +"%Y-%m-%d")-$repo.md
+            git add .
+            git commit -m "Add new post: $repo"
+            git push
+          fi
+        done
