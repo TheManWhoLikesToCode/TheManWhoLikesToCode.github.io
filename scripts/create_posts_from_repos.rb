@@ -7,21 +7,18 @@ GITHUB_USERNAME = 'TheManWhoLikesToCode'
 GITHUB_API_URL = "https://api.github.com/users/#{GITHUB_USERNAME}/repos"
 
 # Fetch repositories from GitHub
-puts "Fetching repositories from GitHub..."
 uri = URI(GITHUB_API_URL)
 response = Net::HTTP.get(uri)
 repositories = JSON.parse(response)
-
-puts "Found #{repositories.length} repositories."
 
 # Loop through repositories and create posts
 repositories.each do |repo|
   title = repo['name']
   description = repo['description']
   url = repo['html_url']
-  date = Date.today.strftime("%Y-%m-%d")
 
-  puts "Creating post for repository: #{title}"
+  # Extract the creation date and format it
+  creation_date = DateTime.parse(repo['created_at']).strftime("%Y-%m-%d")
 
   # Fetch README
   readme_uri = URI("https://api.github.com/repos/#{GITHUB_USERNAME}/#{title}/readme")
@@ -32,8 +29,7 @@ repositories.each do |repo|
   readme_content = readme && readme['content'] ? Base64.decode64(readme['content']) : "No README available for this repository."
 
   # Create the post file
-  Dir.mkdir("../_posts") unless Dir.exist?("..`/_posts")
-  File.open("../_posts/#{date}-#{title}.markdown", "w") do |file|
+  File.open("./_posts/#{creation_date}-#{title}.markdown", "w") do |file|
     file.puts("---")
     file.puts("layout: post")
     file.puts("title: #{title}")
@@ -43,7 +39,7 @@ repositories.each do |repo|
     file.puts("[Go to repository](#{url})")
   end
 
-  puts "Post for repository: #{title} created."
+  system('git add .')
+  system("git commit -m 'Add new post: #{title}'")
+  system('git push')
 end
-
-puts "All posts created."
