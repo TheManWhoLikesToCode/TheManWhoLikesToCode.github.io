@@ -23,13 +23,22 @@ repositories.each do |repo|
   # Fetch README
   readme_uri = URI("https://api.github.com/repos/#{GITHUB_USERNAME}/#{title}/readme")
   readme_response = Net::HTTP.get(readme_uri)
-  readme = JSON.parse(readme_response) rescue nil
 
-  # Decode README content from base64
-  readme_content = readme && readme['content'] ? Base64.decode64(readme['content']) : "No README available for this repository."
+  # Check if the response contains README data or an error message
+  begin
+    readme = JSON.parse(readme_response)
+    if readme['message'] && readme['message'] == 'Not Found'
+      readme_content = "No README available for this repository."
+    else
+      # Decode README content from base64
+      readme_content = Base64.decode64(readme['content'])
+    end
+  rescue JSON::ParserError
+    readme_content = "Error parsing README data."
+  end
 
   # Create the post file
-  File.open("./_posts/#{creation_date}-#{title}.markdown", "w") do |file|
+  File.open("../_posts/#{creation_date}-#{title}.markdown", "w") do |file|
     file.puts("---")
     file.puts("layout: post")
     file.puts("title: #{title}")
