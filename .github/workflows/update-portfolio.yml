@@ -24,7 +24,7 @@ jobs:
 
     - name: Fetch and create posts
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        TOKEN: ${{ secrets.TOKEN }}
       run: |
         # This script will use GitHub API to fetch your repos and create posts
         # You need to create this script, see the next step
@@ -36,5 +36,5 @@ jobs:
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        github_token: ${{ secrets.TOKEN }}
         publish_dir: ./_site
