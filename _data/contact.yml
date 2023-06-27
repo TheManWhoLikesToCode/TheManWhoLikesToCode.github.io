@@ -26,10 +26,10 @@
 # - type: stack-overflow
 #   icon: 'fab fa-stack-overflow'
 #   url:  ''                  # Fill with your stackoverflow homepage
-$
+# $
 # - type: twitter
 #   icon: "fab fa-twitter"
-$
+# $
 # - type: rss
 #   icon: "fas fa-rss"
 #   noblank: true
