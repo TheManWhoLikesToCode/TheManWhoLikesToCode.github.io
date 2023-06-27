@@ -1,8 +1,9 @@
 name: Update Portfolio
 
-on:
-  schedule:
-    - cron: '0 0 * * *' # This schedules the action to run once every day at midnight
+on: 
+  push:
+    branches:
+      - main  # Trigger the workflow on push or pull request to the main branch
 
 jobs:
   update_portfolio:
