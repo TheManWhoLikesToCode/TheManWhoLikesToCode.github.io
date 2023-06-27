@@ -27,7 +27,7 @@ jobs:
       env:
         TOKEN: ${{ secrets.TOKEN }}
       run: |
-        # This script will use GitHub API to fetch your repos and create posts
+        # This script will use GitHub API to fe`tch your repos and create posts
         # You need to create this script, see the next step
         ruby ./scripts/create_posts_from_repos.rb
 
@@ -39,3 +39,4 @@ jobs:
       with:
         github_token: ${{ secrets.TOKEN }}
         publish_dir: ./_site
+`
