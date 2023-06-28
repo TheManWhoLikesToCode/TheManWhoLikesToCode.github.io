@@ -38,7 +38,7 @@ repositories.each do |repo|
   end
 
   # Create the post file
-  File.open("../_posts/#{creation_date}-#{title}.markdown", "w") do |file|
+  File.open("_posts/#{creation_date}-#{title}.markdown", "w")
     file.puts("---")
     file.puts("layout: post")
     file.puts("title: #{title}")
