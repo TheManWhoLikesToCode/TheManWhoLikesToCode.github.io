@@ -6,6 +6,11 @@ require 'base64'
 GITHUB_USERNAME = 'TheManWhoLikesToCode'
 GITHUB_API_URL = "https://api.github.com/users/#{GITHUB_USERNAME}/repos"
 
+# Function to convert relative links to absolute GitHub URLs
+def convert_relative_links_to_absolute(content, username, repository)
+  content.gsub(/\(.\//, "(https://raw.githubusercontent.com/#{username}/#{repository}/master/")
+end
+
 # Setup http request with the token
 http = Net::HTTP.new(URI(GITHUB_API_URL).host, URI(GITHUB_API_URL).port)
 http.use_ssl = true
@@ -14,7 +19,6 @@ request["Authorization"] = "token #{ENV['GH_TOKEN']}"
 
 # Fetch repositories from GitHub
 response = http.request(request)
-puts "Raw response from GitHub API: #{response.body}" # Output raw response for debugging
 repositories = JSON.parse(response.body)
 
 # Check if repositories is an array (expected), or something else
@@ -41,18 +45,13 @@ repositories.each do |repo|
     readme_request = Net::HTTP::Get.new(readme_uri)
     readme_request["Authorization"] = "token #{ENV['GH_TOKEN']}"
     readme_response = http.request(readme_request)
-
-    # Check if the response contains README data or an error message
     readme = JSON.parse(readme_response.body)
-    if readme['message'] && readme['message'] == 'Not Found'
-      readme_content = "No README available for this repository."
-    else
-      # Decode README content from base64
-      readme_content = Base64.decode64(readme['content'])
-    end
 
-    # Debug: Print the title of the repo being processed
-    puts "Processing #{title}"
+    # Decode README content from base64
+    readme_content = Base64.decode64(readme['content'])
+
+    # Convert relative links to absolute GitHub URLs
+    readme_content = convert_relative_links_to_absolute(readme_content, GITHUB_USERNAME, title)
 
     # Create the post file
     File.open("_posts/#{creation_date}-#{title}.markdown", "w") do |file|
