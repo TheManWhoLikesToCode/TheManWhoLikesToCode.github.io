@@ -1,6 +1,0 @@
----
-layout: post
-title: Workshop
-description: ACM Kettering Workshop
----
-[Find out more in the repository](https://github.com/TheManWhoLikesToCode/Workshop)
