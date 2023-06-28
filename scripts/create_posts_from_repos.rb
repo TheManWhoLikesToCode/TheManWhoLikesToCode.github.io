@@ -6,6 +6,15 @@ require 'base64'
 GITHUB_USERNAME = 'TheManWhoLikesToCode'
 GITHUB_API_URL = "https://api.github.com/users/#{GITHUB_USERNAME}/repos"
 
+# Function to extract the description section from the README content
+def extract_description_section(readme_content)
+  if match = readme_content.match(/# Description\n(.*?)(\n#|$)/m)
+    match[1].strip
+  else
+    'Description not found'
+  end
+end
+
 # Setup http request with the token
 http = Net::HTTP.new(URI(GITHUB_API_URL).host, URI(GITHUB_API_URL).port)
 http.use_ssl = true
@@ -29,19 +38,31 @@ puts "Fetched #{repositories.length} repositories"
 repositories.each do |repo|
   begin
     title = repo['name']
-    description = repo['description']
     url = repo['html_url']
 
     # Extract the creation date and format it
     creation_date = DateTime.parse(repo['created_at']).strftime("%Y-%m-%d")
+
+    # Fetch README
+    readme_uri = URI("https://api.github.com/repos/#{GITHUB_USERNAME}/#{title}/readme")
+    readme_request = Net::HTTP::Get.new(readme_uri)
+    readme_request["Authorization"] = "token #{ENV['GH_TOKEN']}"
+    readme_response = http.request(readme_request)
+    readme = JSON.parse(readme_response.body)
+
+    # Decode README content from base64
+    readme_content = Base64.decode64(readme['content'])
+
+    # Extract description section
+    description = extract_description_section(readme_content)
 
     # Create the post file
     File.open("_posts/#{creation_date}-#{title}.markdown", "w") do |file|
       file.puts("---")
       file.puts("layout: post")
       file.puts("title: #{title}")
-      file.puts("description: #{description}")
       file.puts("---")
+      file.puts(description)
       file.puts("[Find out more in the repository](#{url})")
     end
 
