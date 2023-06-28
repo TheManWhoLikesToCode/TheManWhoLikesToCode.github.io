@@ -73,16 +73,18 @@ end
 
 # Debug: Check git operations after processing all repositories
 puts "Adding files to git"
+# Adding files to git
 puts `git add .`
 
-puts "Committing files to git"
-commit_output = `git commit -m 'Add new posts from repositories'`
-puts commit_output
-
-if commit_output.include?("nothing to commit")
+# Check if there are changes to be committed
+status = `git status --porcelain`
+if status.empty?
   puts "Nothing new to commit."
+  exit 0 # <-- Explicitly exiting with a 'success' status code
 else
+  # Commit and push changes
+  puts "Committing files to git"
+  puts `git commit -m 'Add new posts from repositories'`
   puts "Pushing changes to remote repository"
-  # Use the token when pushing changes
   puts `git push https://x-access-token:#{ENV['GH_TOKEN']}@github.com/#{GITHUB_USERNAME}/TheManWhoLikesToCode.github.io.git`
 end
