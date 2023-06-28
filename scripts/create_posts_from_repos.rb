@@ -6,9 +6,9 @@ require 'base64'
 GITHUB_USERNAME = 'TheManWhoLikesToCode'
 GITHUB_API_URL = "https://api.github.com/users/#{GITHUB_USERNAME}/repos"
 
-# Function to convert relative links to absolute GitHub URLs
-def convert_relative_links_to_absolute(content, username, repository)
-  content.gsub(/\(.\//, "(https://raw.githubusercontent.com/#{username}/#{repository}/master/")
+# Function to remove image markdown syntax
+def remove_images_from_content(content)
+  content.gsub(/!\[.*?\]\(.*?\)/, '')
 end
 
 # Setup http request with the token
@@ -50,8 +50,8 @@ repositories.each do |repo|
     # Decode README content from base64
     readme_content = Base64.decode64(readme['content'])
 
-    # Convert relative links to absolute GitHub URLs
-    readme_content = convert_relative_links_to_absolute(readme_content, GITHUB_USERNAME, title)
+    # Remove images from the README content
+    readme_content = remove_images_from_content(readme_content)
 
     # Create the post file
     File.open("_posts/#{creation_date}-#{title}.markdown", "w") do |file|
