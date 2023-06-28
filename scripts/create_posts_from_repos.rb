@@ -6,10 +6,15 @@ require 'base64'
 GITHUB_USERNAME = 'TheManWhoLikesToCode'
 GITHUB_API_URL = "https://api.github.com/users/#{GITHUB_USERNAME}/repos"
 
+# Setup http request with the token
+http = Net::HTTP.new(URI(GITHUB_API_URL).host, URI(GITHUB_API_URL).port)
+http.use_ssl = true
+request = Net::HTTP::Get.new(URI(GITHUB_API_URL))
+request["Authorization"] = "token #{ENV['GH_TOKEN']}"
+
 # Fetch repositories from GitHub
-uri = URI(GITHUB_API_URL)
-response = Net::HTTP.get(uri)
-repositories = JSON.parse(response)
+response = http.request(request)
+repositories = JSON.parse(response.body)
 
 # Debug: Check the number of fetched repositories
 puts "Fetched #{repositories.length} repositories"
@@ -25,11 +30,13 @@ repositories.each do |repo|
 
   # Fetch README
   readme_uri = URI("https://api.github.com/repos/#{GITHUB_USERNAME}/#{title}/readme")
-  readme_response = Net::HTTP.get(readme_uri)
+  readme_request = Net::HTTP::Get.new(readme_uri)
+  readme_request["Authorization"] = "token #{ENV['GH_TOKEN']}"
+  readme_response = http.request(readme_request)
 
   # Check if the response contains README data or an error message
   begin
-    readme = JSON.parse(readme_response)
+    readme = JSON.parse(readme_response.body)
     if readme['message'] && readme['message'] == 'Not Found'
       readme_content = "No README available for this repository."
     else
@@ -67,6 +74,6 @@ repositories.each do |repo|
   else
     puts "Pushing changes to remote repository"
     # Use the token when pushing changes
-    puts `git push https://#{ENV['GH_TOKEN']}@github.com/#{GITHUB_USERNAME}/TheManWhoLikesToCode.github.io.git`
+    puts `git push https://x-access-token:#{ENV['GH_TOKEN']}@github.com/#{GITHUB_USERNAME}/TheManWhoLikesToCode.github.io.git`
   end
 end

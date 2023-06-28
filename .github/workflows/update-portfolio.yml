@@ -8,11 +8,13 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      GH_TOKEN: ${{ secrets.TOKEN }} # Make sure to set this secret in your GitHub repo settings
+      GH_TOKEN: ${{ secrets.GH_PAT }} # Make sure to set this secret in your GitHub repo settings
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GH_PAT }}
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -32,3 +34,11 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           ruby scripts/create_posts_from_repos.rb
+
+      - name: Commit files
+        run: |
+          git add .
+          git commit -m "Add posts"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
