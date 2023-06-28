@@ -42,6 +42,10 @@ repositories.each do |repo|
     else
       # Decode README content from base64
       readme_content = Base64.decode64(readme['content'])
+      
+      # Replace relative links with absolute links to GitHub repository
+      github_repo_url = "https://github.com/#{GITHUB_USERNAME}/#{title}/blob/main/"
+      readme_content.gsub!(/\]\((?!http)(.*?)\)/, "](#{github_repo_url}\\1)")
     end
   rescue JSON::ParserError
     readme_content = "Error parsing README data."
