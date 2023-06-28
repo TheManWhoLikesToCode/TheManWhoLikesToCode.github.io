@@ -66,6 +66,7 @@ repositories.each do |repo|
     puts "Nothing new to commit."
   else
     puts "Pushing changes to remote repository"
-    puts `git push`
+    # Use the token when pushing changes
+    puts `git push https://#{ENV['GH_TOKEN']}@github.com/#{GITHUB_USERNAME}/TheManWhoLikesToCode.github.io.git`
   end
 end
