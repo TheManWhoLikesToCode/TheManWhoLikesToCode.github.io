@@ -86,5 +86,14 @@ else
   puts "Committing files to git"
   puts `git commit -m 'Add new posts from repositories'`
   puts "Pushing changes to remote repository"
-  puts `git push https://x-access-token:#{ENV['GH_TOKEN']}@github.com/#{GITHUB_USERNAME}/TheManWhoLikesToCode.github.io.git`
+  result = `git push https://x-access-token:#{ENV['GH_TOKEN']}@github.com/#{GITHUB_USERNAME}/TheManWhoLikesToCode.github.io.git`
+  puts result
+  
+  # Check if the push was successful, exit with an appropriate status code
+  if result.include?("Everything up-to-date")
+    exit 0
+  else
+    exit 1
+  end
 end
+
