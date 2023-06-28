@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      GH_TOKEN: ${{ secrets.GH_TOKEN }} # Make sure to set this secret in your GitHub repo settings
+      GH_TOKEN: ${{ secrets.TOKEN }} # Make sure to set this secret in your GitHub repo settings
 
     steps:
       - name: Checkout repository
