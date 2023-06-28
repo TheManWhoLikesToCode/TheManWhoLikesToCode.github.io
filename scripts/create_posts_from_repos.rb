@@ -11,6 +11,9 @@ uri = URI(GITHUB_API_URL)
 response = Net::HTTP.get(uri)
 repositories = JSON.parse(response)
 
+# Debug: Check the number of fetched repositories
+puts "Fetched #{repositories.length} repositories"
+
 # Loop through repositories and create posts
 repositories.each do |repo|
   title = repo['name']
@@ -37,6 +40,9 @@ repositories.each do |repo|
     readme_content = "Error parsing README data."
   end
 
+  # Debug: Print the title of the repo being processed
+  puts "Processing #{title}"
+
   # Create the post file
   File.open("_posts/#{creation_date}-#{title}.markdown", "w") do |file|
     file.puts("---")
@@ -48,7 +54,18 @@ repositories.each do |repo|
     file.puts("[Go to repository](#{url})")
   end
 
-  system('git add .')
-  system("git commit -m 'Add new post: #{title}'")
-  system('git push')
+  # Debug: Check git operations
+  puts "Adding files to git"
+  puts `git add .`
+  
+  puts "Committing files to git"
+  commit_output = `git commit -m 'Add new post: #{title}'`
+  puts commit_output
+  
+  if commit_output.include?("nothing to commit")
+    puts "Nothing new to commit."
+  else
+    puts "Pushing changes to remote repository"
+    puts `git push`
+  end
 end
