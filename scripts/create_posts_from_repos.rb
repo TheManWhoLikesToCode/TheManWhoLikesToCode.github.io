@@ -14,70 +14,74 @@ request["Authorization"] = "token #{ENV['GH_TOKEN']}"
 
 # Fetch repositories from GitHub
 response = http.request(request)
+puts "Raw response from GitHub API: #{response.body}" # Output raw response for debugging
 repositories = JSON.parse(response.body)
+
+# Check if repositories is an array (expected), or something else
+unless repositories.is_a?(Array)
+  puts "Unexpected response format. Exiting."
+  exit
+end
 
 # Debug: Check the number of fetched repositories
 puts "Fetched #{repositories.length} repositories"
 
 # Loop through repositories and create posts
 repositories.each do |repo|
-  title = repo['name']
-  description = repo['description']
-  url = repo['html_url']
-
-  # Extract the creation date and format it
-  creation_date = DateTime.parse(repo['created_at']).strftime("%Y-%m-%d")
-
-  # Fetch README
-  readme_uri = URI("https://api.github.com/repos/#{GITHUB_USERNAME}/#{title}/readme")
-  readme_request = Net::HTTP::Get.new(readme_uri)
-  readme_request["Authorization"] = "token #{ENV['GH_TOKEN']}"
-  readme_response = http.request(readme_request)
-
-  # Check if the response contains README data or an error message
   begin
+    title = repo['name']
+    description = repo['description']
+    url = repo['html_url']
+
+    # Extract the creation date and format it
+    creation_date = DateTime.parse(repo['created_at']).strftime("%Y-%m-%d")
+
+    # Fetch README
+    readme_uri = URI("https://api.github.com/repos/#{GITHUB_USERNAME}/#{title}/readme")
+    readme_request = Net::HTTP::Get.new(readme_uri)
+    readme_request["Authorization"] = "token #{ENV['GH_TOKEN']}"
+    readme_response = http.request(readme_request)
+
+    # Check if the response contains README data or an error message
     readme = JSON.parse(readme_response.body)
     if readme['message'] && readme['message'] == 'Not Found'
       readme_content = "No README available for this repository."
     else
       # Decode README content from base64
       readme_content = Base64.decode64(readme['content'])
-      
-      # Replace relative links with absolute links to GitHub repository
-      github_repo_url = "https://github.com/#{GITHUB_USERNAME}/#{title}/blob/main/"
-      readme_content.gsub!(/\]\((?!http)(.*?)\)/, "](#{github_repo_url}\\1)")
     end
-  rescue JSON::ParserError
-    readme_content = "Error parsing README data."
-  end
 
-  # Debug: Print the title of the repo being processed
-  puts "Processing #{title}"
+    # Debug: Print the title of the repo being processed
+    puts "Processing #{title}"
 
-  # Create the post file
-  File.open("_posts/#{creation_date}-#{title}.markdown", "w") do |file|
-    file.puts("---")
-    file.puts("layout: post")
-    file.puts("title: #{title}")
-    file.puts("description: #{description}")
-    file.puts("---")
-    file.puts(readme_content)
-    file.puts("[Go to repository](#{url})")
-  end
+    # Create the post file
+    File.open("_posts/#{creation_date}-#{title}.markdown", "w") do |file|
+      file.puts("---")
+      file.puts("layout: post")
+      file.puts("title: #{title}")
+      file.puts("description: #{description}")
+      file.puts("---")
+      file.puts(readme_content)
+      file.puts("[Go to repository](#{url})")
+    end
 
-  # Debug: Check git operations
-  puts "Adding files to git"
-  puts `git add .`
-  
-  puts "Committing files to git"
-  commit_output = `git commit -m 'Add new post: #{title}'`
-  puts commit_output
-  
-  if commit_output.include?("nothing to commit")
-    puts "Nothing new to commit."
-  else
-    puts "Pushing changes to remote repository"
-    # Use the token when pushing changes
-    puts `git push https://x-access-token:#{ENV['GH_TOKEN']}@github.com/#{GITHUB_USERNAME}/TheManWhoLikesToCode.github.io.git`
+  rescue Exception => e
+    puts "An error occurred processing the repository #{title}: #{e.message}"
   end
+end
+
+# Debug: Check git operations after processing all repositories
+puts "Adding files to git"
+puts `git add .`
+
+puts "Committing files to git"
+commit_output = `git commit -m 'Add new posts from repositories'`
+puts commit_output
+
+if commit_output.include?("nothing to commit")
+  puts "Nothing new to commit."
+else
+  puts "Pushing changes to remote repository"
+  # Use the token when pushing changes
+  puts `git push https://x-access-token:#{ENV['GH_TOKEN']}@github.com/#{GITHUB_USERNAME}/TheManWhoLikesToCode.github.io.git`
 end
