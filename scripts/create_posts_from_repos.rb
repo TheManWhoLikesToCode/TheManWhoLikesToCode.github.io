@@ -8,7 +8,8 @@ GITHUB_API_URL = "https://api.github.com/users/#{GITHUB_USERNAME}/repos"
 
 # Function to extract the description section from the README content
 def extract_description_section(readme_content)
-  if match = readme_content.match(/# Description\n(.*?)(\n#|$)/m)
+  match = readme_content.match(/# Description\n(.*?)(\n#|$)/m)
+  if match
     match[1].strip
   else
     'Description not found'
@@ -86,14 +87,8 @@ else
   puts "Committing files to git"
   puts `git commit -m 'Add new posts from repositories'`
   puts "Pushing changes to remote repository"
-  result = `git push https://x-access-token:#{ENV['GH_TOKEN']}@github.com/#{GITHUB_USERNAME}/TheManWhoLikesToCode.github.io.git`
-  puts result
+  puts `git push https://x-access-token:#{ENV['GH_TOKEN']}@github.com/#{GITHUB_USERNAME}/TheManWhoLikesToCode.github.io.git`
   
-  # Check if the push was successful, exit with an appropriate status code
-  if result.include?("Everything up-to-date")
-    exit 0
-  else
-    exit 1
-  end
+  # Exit with a success status code
+  exit 0
 end
-
