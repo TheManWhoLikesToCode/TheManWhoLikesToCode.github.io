@@ -1,7 +1,8 @@
 name: Jekyll Post Creator
 
 on:
-  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * *" # This schedules the action to run at midnight every day
 
 jobs:
   build:
