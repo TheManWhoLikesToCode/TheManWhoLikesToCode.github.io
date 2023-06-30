@@ -5,9 +5,6 @@ on:
     - cron: "0 0 * * *" # This schedules the action to run at midnight every day
   workflow_dispatch: # This allows you to manually trigger the action
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
 permissions:
   contents: read
   pages: write
