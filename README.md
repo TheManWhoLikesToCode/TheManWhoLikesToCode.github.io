@@ -41,6 +41,6 @@ Hello there! 👋🏾 I am Jaydin Freeman, a Computer Science and Artificial Int
 - 🛠️ GitHub: [TheManWhoLikesToCode](https://github.com/TheManWhoLikesToCode)
 - 🌐 Portfolio: [themanwholikestocode.github.io/Portfolio](https://themanwholikestocode.github.io/Portfolio/)
 
-## 📝 Description
+## Description
 Welcome to the portfolio of Jaydin Freeman, where you can find information on my education, experience, certifications, leadership roles, and more. This portfolio is designed to give an overview of my skills, accomplishments, and contributions in the field of Computer Science and Artificial Intelligence.
 
