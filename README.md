@@ -1,45 +1,42 @@
-# Chirpy Starter [![Gem Version](https://img.shields.io/gem/v/jekyll-theme-chirpy)](https://rubygems.org/gems/jekyll-theme-chirpy) [![GitHub license](https://img.shields.io/github/license/cotes2020/chirpy-starter.svg?color=blue)][mit]
+# 🚀 Jaydin Freeman - Portfolio Summary 🚀
 
-When installing the [**Chirpy**][chirpy] theme through [RubyGems.org][gem], Jekyll can only read files in the folders `/_data`, `/_layouts`, `/_includes`, `/_sass` and `/assets`, as well as a small part of options of the `/_config.yml` file from the theme's gem. If you have ever installed this theme gem, you can use the command `bundle info --path jekyll-theme-chirpy` to locate these files.
+## 👨🏾‍💻 About Me
+Hello there! 👋🏾 I am Jaydin Freeman, a Computer Science and Artificial Intelligence major at Kettering University. My passion lies in coding, solving complex problems and I have a knack for Object-Oriented Programming, Data Structures, Algorithms, Algorithmic Analysis, and Machine Learning. Besides coding, I also enjoy playing basketball and cooking. 🏀🍳
 
-The Jekyll team claims that this is to leave the ball in the user’s court, but this also results in users not being able to enjoy the out-of-the-box experience when using feature-rich themes.
+## 💼 Experience
+- 🌟 SEO Tech Developer Fellow, Sponsors for Educational Opportunity (March 2023 - Present).
+- 🔧 Embedded Systems Engineering Co-op, BorgWarner (December 2022 - March 2023):
+    - Auto-code development environment.
+    - MATLAB-Simulink environment for auto-coding.
+    - Hardware in the loop implementation.
+- 🛠️ Product Engineering Co-op, BorgWarner (July 2022 - September 2022):
+    - Designed and implemented tools for analyzing and predicting test results for E-Motor development.
+- 📐 Test Engineering Co-op, BorgWarner (January 2022 - March 2022):
+    - Created CAD models to increase OCV testing capabilities.
+- 🚀 Prototype Engineering Co-op, BorgWarner (July 2021 - September 2021):
+    - Worked with Excel and Minitab on measurement processes for Prototype VFS.
 
-To fully use all the features of **Chirpy**, you need to copy the other critical files from the theme's gem to your Jekyll site. The following is a list of targets:
+## 🎖️ Leadership & Activities
+- 🎓 Chair of Kettering’s Association for Computing Machinery Chapter.
+- 🌍 Chapter Programs Chair of the National Society of Black Engineers.
+- 💰 Treasurer of Black Student Union.
+- 🌐 Treasurer of the International Club.
+- 🤝🏾 Member of Alpha Phi Alpha Fraternity.
+- 🎨 Member of ColorStack, a non-profit organization assisting Black and Latinx students through their CS degrees.
+- 🚀 Career Prep Fellow at Management Leadership for Tomorrow.
 
-```shell
-.
-├── _config.yml
-├── _plugins
-├── _tabs
-└── index.html
-```
+## 📜 Certifications
+- 💻 PC PRO.
+- ☕ Java (Basic).
+- 🧩 Problem Solving (Basic).
+- 📘 Oracle Java Certification: Data Types.
 
-To save you time, and also in case you lose some files while copying, we extract those files/configurations of the latest version of the **Chirpy** theme and the [CD][CD] workflow to here, so that you can start writing in minutes.
+## 📖 Education
+- 🏫 Kettering University (2021 - June 2025), Computer Science.
+- 🎓 Avondale High School (2018 - 2021), High School Diploma.
 
-## Prerequisites
-
-Follow the instructions in the [Jekyll Docs](https://jekyllrb.com/docs/installation/) to complete the installation of the basic environment. [Git](https://git-scm.com/) also needs to be installed.
-
-## Installation
-
-Sign in to GitHub and [**use this template**][use-template] to generate a brand new repository and name it `USERNAME.github.io`, where `USERNAME` represents your GitHub username.
-
-Then clone it to your local machine and run:
-
-```
-$ bundle
-```
-
-## Usage
-
-Please see the [theme's docs](https://github.com/cotes2020/jekyll-theme-chirpy#documentation).
-
-## License
-
-This work is published under [MIT][mit] License.
-
-[gem]: https://rubygems.org/gems/jekyll-theme-chirpy
-[chirpy]: https://github.com/cotes2020/jekyll-theme-chirpy/
-[use-template]: https://github.com/cotes2020/chirpy-starter/generate
-[CD]: https://en.wikipedia.org/wiki/Continuous_deployment
-[mit]: https://github.com/cotes2020/chirpy-starter/blob/master/LICENSE
+## 📧 Contact Me
+- 📩 Email: [jaydinfreemanwork@gmail.com](mailto:jaydinfreemanwork@gmail.com)
+- 💼 LinkedIn: [linkedin.com/in/jaydinfreeman](https://linkedin.com/in/jaydinfreeman)
+- 🛠️ GitHub: [TheManWhoLikesToCode](https://github.com/TheManWhoLikesToCode)
+- 🌐 Portfolio: [themanwholikestocode.github.io/Portfolio](https://themanwholikestocode.github.io/Portfolio/)
