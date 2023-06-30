@@ -40,7 +40,8 @@ jobs:
       - name: Commit files
         run: |
           git add .
-          git commit -m "Add posts"
+          git diff-index --quiet HEAD || git commit -m "Add posts"
           git push
+
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
