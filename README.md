@@ -47,3 +47,6 @@ Hello there! 👋🏾 I am Jaydin Freeman, a Computer Science and Artificial Int
 - 📩 Email: [jaydinfreemanwork@gmail.com](mailto:jaydinfreemanwork@gmail.com)
 - 💼 LinkedIn: [linkedin.com/in/jaydinfreeman](https://linkedin.com/in/jaydinfreeman)
 - 🛠️ GitHub: [TheManWhoLikesToCode](https://github.com/TheManWhoLikesTo
+
+## Description
+Welcome to the portfolio of Jaydin Freeman, where you can find information on my education, experience, certifications, leadership roles, and more. This portfolio is designed to give an overview of my skills, accomplishments, and contributions in the field of Computer Science and Artificial Intelligence.
