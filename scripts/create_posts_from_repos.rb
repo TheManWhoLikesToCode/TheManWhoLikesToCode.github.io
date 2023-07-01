@@ -8,11 +8,22 @@ GITHUB_API_URL = "https://api.github.com/users/#{GITHUB_USERNAME}/repos"
 
 # Function to extract the description section from the README content
 def extract_description_section(readme_content)
-  match = readme_content.match(/# Description\n(.*?)(\n#|$)/m)
+  match = readme_content.match(/## Description\n(.*?)(\n##|$)/m)
   if match
     match[1].strip
   else
     'Description not found'
+  end
+end
+
+# Function to execute an HTTP request with error handling
+def execute_http_request(http, request)
+  response = http.request(request)
+  if response.is_a?(Net::HTTPSuccess)
+    JSON.parse(response.body)
+  else
+    puts "HTTP Error: #{response.code} - #{response.message}"
+    nil
   end
 end
 
@@ -23,11 +34,10 @@ request = Net::HTTP::Get.new(URI(GITHUB_API_URL))
 request["Authorization"] = "token #{ENV['GH_TOKEN']}"
 
 # Fetch repositories from GitHub
-response = http.request(request)
-repositories = JSON.parse(response.body)
+repositories = execute_http_request(http, request)
 
-# Check if repositories is an array (expected), or something else
-unless repositories.is_a?(Array)
+# Validate repositories response
+if repositories.nil? || !repositories.is_a?(Array)
   puts "Unexpected response format. Exiting."
   exit
 end
@@ -40,6 +50,8 @@ repositories.each do |repo|
   begin
     title = repo['name']
     url = repo['html_url']
+    language = repo['language']
+    stars = repo['stargazers_count']
 
     # Extract the creation date and format it
     creation_date = DateTime.parse(repo['created_at']).strftime("%Y-%m-%d")
@@ -48,8 +60,7 @@ repositories.each do |repo|
     readme_uri = URI("https://api.github.com/repos/#{GITHUB_USERNAME}/#{title}/readme")
     readme_request = Net::HTTP::Get.new(readme_uri)
     readme_request["Authorization"] = "token #{ENV['GH_TOKEN']}"
-    readme_response = http.request(readme_request)
-    readme = JSON.parse(readme_response.body)
+    readme = execute_http_request(http, readme_request)
 
     # Decode README content from base64
     readme_content = Base64.decode64(readme['content'])
@@ -62,10 +73,14 @@ repositories.each do |repo|
       file.puts("---")
       file.puts("layout: post")
       file.puts("title: #{title}")
+      file.puts("language: #{language}")
+      file.puts("stars: #{stars}")
       file.puts("---")
       file.puts(description)
       file.puts("[Find out more in the repository](#{url})")
     end
+
+    puts "Processed repository: #{title}"
 
   rescue Exception => e
     puts "An error occurred processing the repository #{title}: #{e.message}"
